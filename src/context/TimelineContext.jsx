@@ -4,17 +4,9 @@ import { createContext, useContext, useState } from "react";
 
 const TimelineContext = createContext();
 
-const initialData = [
-  { id: "1", type: "Meetup", friendName: "Tom Baker", title: "Meetup with Tom Baker", date: "March 29, 2026" },
-  { id: "2", type: "Text", friendName: "Sarah Chen", title: "Text with Sarah Chen", date: "March 28, 2026" },
-  { id: "3", type: "Meetup", friendName: "Olivia Martinez", title: "Meetup with Olivia Martinez", date: "March 26, 2026" },
-  { id: "4", type: "Video", friendName: "Aisha Patel", title: "Video with Aisha Patel", date: "March 23, 2026" },
-  { id: "5", type: "Meetup", friendName: "Sarah Chen", title: "Meetup with Sarah Chen", date: "March 21, 2026" },
-  { id: "6", type: "Call", friendName: "Marcus Johnson", title: "Call with Marcus Johnson", date: "March 19, 2026" },
-];
-
+// Removed all fixed data to start with a blank timeline
 export function TimelineProvider({ children }) {
-  const [entries, setEntries] = useState(initialData);
+  const [entries, setEntries] = useState([]);
 
   const addEntry = (friendName, type, title) => {
     const newEntry = {
@@ -22,9 +14,14 @@ export function TimelineProvider({ children }) {
       friendName,
       type,
       title,
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+      date: new Date().toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric' 
+      })
     };
     
+    // Using a functional update to ensure we don't lose logs
     setEntries((prev) => [newEntry, ...prev]);
   };
 

@@ -7,8 +7,6 @@ import { ChevronDown } from "lucide-react";
 
 export default function TimelinePage() {
   const { entries } = useTimeline();
-  
-
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
 
@@ -16,12 +14,10 @@ export default function TimelinePage() {
 
   const getIconPath = (type) => {
     const safeType = type?.toLowerCase() || "text";
-    
     if (["call", "text", "video", "meetup"].includes(safeType)) {
       return `/${safeType}.png`;
     }
-    
-    return safeType === "meetup" ? "/meetup.png" : "/text.png";
+    return "/text.png";
   };
 
   const filteredEntries = entries.filter((entry) => {
@@ -31,12 +27,10 @@ export default function TimelinePage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
         Timeline
       </h1>
 
-      {/* Updated Filter Dropdown */}
       <div className="mb-8 relative w-max">
         <button 
           onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -53,7 +47,7 @@ export default function TimelinePage() {
                 key={option}
                 onClick={() => {
                   setSelectedFilter(option);
-                  setIsFilterOpen(false); // Close menu after selection
+                  setIsFilterOpen(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${
                   selectedFilter === option 
@@ -70,13 +64,16 @@ export default function TimelinePage() {
 
       <div className="flex flex-col gap-3">
         {filteredEntries.length === 0 ? (
-          <p className="text-slate-500 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            {entries.length === 0 
-              ? "No interactions logged yet." 
-              : `No ${selectedFilter.toLowerCase()}s found in your timeline.`}
-          </p>
+          <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+             <p className="text-slate-500">
+              {entries.length === 0 
+                ? "No interactions logged yet. Go to a friend's page to log one!" 
+                : `No ${selectedFilter.toLowerCase()}s found.`}
+            </p>
+          </div>
         ) : (
-          [...filteredEntries].reverse().map((entry) => (
+          // Removed .reverse() here because Context now prepends new items
+          filteredEntries.map((entry) => (
             <div 
               key={entry.id} 
               className="bg-white border border-gray-100 rounded-xl p-4 md:p-5 flex items-center gap-5 shadow-sm"
@@ -102,7 +99,6 @@ export default function TimelinePage() {
           ))
         )}
       </div>
-
     </div>
   );
 }
