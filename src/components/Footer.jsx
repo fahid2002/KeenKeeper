@@ -23,7 +23,7 @@ export default function Footer() {
         
         <div className="flex gap-4 mb-16">
           <a 
-            href="https://instagram.com" 
+            href="https://www.instagram.com/fahidhasankhanifty/" 
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-white rounded-full hover:bg-gray-100 transition flex items-center justify-center w-10 h-10"
@@ -32,7 +32,7 @@ export default function Footer() {
           </a>
           
           <a 
-            href="https://facebook.com" 
+            href="https://www.facebook.com/fh.ifty.1" 
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-white rounded-full hover:bg-gray-100 transition flex items-center justify-center w-10 h-10"
@@ -41,7 +41,7 @@ export default function Footer() {
           </a>
           
           <a 
-            href="https://twitter.com" 
+            href="https://x.com/fh_ifty" 
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-white rounded-full hover:bg-gray-100 transition flex items-center justify-center w-10 h-10"
