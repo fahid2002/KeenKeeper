@@ -4,7 +4,6 @@ import { createContext, useContext, useState } from "react";
 
 const TimelineContext = createContext();
 
-// Dummy data matching the Figma Timeline image
 const initialData = [
   { id: "1", type: "Meetup", friendName: "Tom Baker", title: "Meetup with Tom Baker", date: "March 29, 2026" },
   { id: "2", type: "Text", friendName: "Sarah Chen", title: "Text with Sarah Chen", date: "March 28, 2026" },
@@ -17,7 +16,6 @@ const initialData = [
 export function TimelineProvider({ children }) {
   const [entries, setEntries] = useState(initialData);
 
-  // Function to add a new interaction
   const addEntry = (friendName, type, title) => {
     const newEntry = {
       id: Date.now().toString(),
@@ -27,7 +25,6 @@ export function TimelineProvider({ children }) {
       date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
     };
     
-    // Add the new entry to the top of the list
     setEntries((prev) => [newEntry, ...prev]);
   };
 
@@ -38,7 +35,6 @@ export function TimelineProvider({ children }) {
   );
 }
 
-// Custom hook for easy access
 export function useTimeline() {
   const context = useContext(TimelineContext);
   if (context === undefined) {

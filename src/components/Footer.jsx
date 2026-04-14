@@ -21,7 +21,6 @@ export default function Footer() {
 
         <p className="font-semibold mb-4 text-sm">Social Links</p>
         
-        {/* Updated: Removed padding (p-2.5) and increased Image sizes to fit the circles perfectly */}
         <div className="flex gap-4 mb-16">
           <a 
             href="https://instagram.com" 

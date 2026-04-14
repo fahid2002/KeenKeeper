@@ -19,7 +19,6 @@ export default function FriendDetails() {
   const params = useParams();
   const { entries, addEntry } = useTimeline();
 
-  // Find the specific friend
   const friend = friendsData.find((f) => f.id.toString() === params.id);
 
   if (!friend) {
@@ -30,31 +29,26 @@ export default function FriendDetails() {
     );
   }
 
-  // Figma accurate status pill colors
   const statusConfig = {
     "overdue": "bg-[#FF4D4D] text-white",
     "almost due": "bg-[#FFB020] text-white",
     "on-track": "bg-[#1C4E3A] text-white",
   };
 
-  // Requirement 6 & 10.3: Log interaction and show toast
   const handleInteraction = (type) => {
     const title = `${type} with ${friend.name}`;
     addEntry(friend.name, type, title);
     toast.success(`Logged a ${type} with ${friend.name}!`);
   };
 
-  // Format the date exactly like Figma (e.g., "Feb 27, 2026")
   const formattedNextDue = new Date(friend.next_due_date).toLocaleDateString('en-US', { 
     month: 'short', 
     day: 'numeric', 
     year: 'numeric' 
   });
 
-  // Filter timeline entries to only show this friend's history
   const friendHistory = entries.filter(e => e.friendName === friend.name);
 
-  // Helper to map interaction types to icons in the recent history
   const getInteractionIcon = (type) => {
     if (type === "Call") return <Phone className="w-5 h-5 text-slate-700" />;
     if (type === "Video") return <Video className="w-5 h-5 text-slate-700" />;
@@ -64,15 +58,10 @@ export default function FriendDetails() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       
-      {/* 2-Column Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
-        {/* ========================================== */}
-        {/* LEFT COLUMN (Profile & Action Buttons)     */}
-        {/* ========================================== */}
+  
         <div className="lg:col-span-4 flex flex-col gap-3">
           
-          {/* Profile Card */}
           <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center text-center">
             <div className="w-24 h-24 relative mb-4">
               <Image 
@@ -85,7 +74,6 @@ export default function FriendDetails() {
             
             <h1 className="text-xl font-bold text-slate-900 mb-3">{friend.name}</h1>
             
-            {/* Stacked Pills matching Figma */}
             <div className="flex flex-col gap-2 w-full items-center mb-5">
               <span className={`px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusConfig[friend.status]}`}>
                 {friend.status}
@@ -102,7 +90,6 @@ export default function FriendDetails() {
             <p className="text-xs text-slate-400">Preferred: email</p>
           </div>
 
-          {/* Action Buttons (Strictly styling per Figma) */}
           <button className="w-full bg-white border border-gray-200 text-slate-700 py-3.5 rounded-xl text-sm font-semibold hover:bg-slate-50 transition flex items-center justify-center gap-2 shadow-sm">
             <Bell className="w-4 h-4" />
             Snooze 2 Weeks
@@ -121,12 +108,9 @@ export default function FriendDetails() {
         </div>
 
 
-        {/* ========================================== */}
-        {/* RIGHT COLUMN (Stats, Goals, Actions, Hist) */}
-        {/* ========================================== */}
+       
         <div className="lg:col-span-8 flex flex-col gap-6">
           
-          {/* 1. Stats Cards (3 in a row) */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-white py-6 px-4 rounded-xl border border-gray-100 shadow-sm text-center flex flex-col justify-center">
               <span className="text-3xl font-extrabold text-[#1C4E3A] mb-1">{friend.days_since_contact}</span>
@@ -144,7 +128,6 @@ export default function FriendDetails() {
             </div>
           </div>
 
-          {/* 2. Relationship Goal Card */}
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-base font-bold text-slate-900">Relationship Goal</h2>
@@ -157,7 +140,6 @@ export default function FriendDetails() {
             </p>
           </div>
 
-          {/* 3. Quick Check-In Card */}
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <h2 className="text-base font-bold text-slate-900 mb-4">Quick Check-In</h2>
             <div className="grid grid-cols-3 gap-4">
@@ -189,7 +171,6 @@ export default function FriendDetails() {
             </div>
           </div>
 
-          {/* 4. Recent Interactions (Matches Figma Layout) */}
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-base font-bold text-slate-900">Recent Interactions</h2>

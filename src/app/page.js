@@ -5,14 +5,13 @@ import { Plus } from "lucide-react";
 import FriendCard from "@/components/FriendCard";
 import friendsData from "@/data/friends.json";
 import { useTimeline } from "@/context/TimelineContext";
+import toast from "react-hot-toast"; // <-- Added import
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { entries } = useTimeline();
 
-  // Requirement 10.2: Show loading animation while fetching data
   useEffect(() => {
-    // Simulating a network fetch delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 800);
@@ -28,16 +27,20 @@ export default function Home() {
     );
   }
 
-  // Calculate dynamic stats for the summary cards
   const totalFriends = friendsData.length;
   const onTrackCount = friendsData.filter(f => f.status === "on-track").length;
   const needAttentionCount = friendsData.filter(f => f.status === "overdue" || f.status === "almost due").length;
   const interactionCount = entries.length;
 
+  const handleAddFriend = () => {
+    toast.success("Ready to add a new connection! (Form coming soon)", {
+      icon: '👋',
+    });
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       
-      {/* 1. Banner Section */}
       <div className="text-center mb-16 mt-4">
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Friends to keep close in your life
@@ -45,13 +48,16 @@ export default function Home() {
         <p className="text-slate-500 text-base max-w-2xl mx-auto mb-8">
           Your personal shelf of meaningful connections. Browse, tend, and nurture the relationships that matter most.
         </p>
-        <button className="inline-flex items-center gap-2 bg-[#1C4E3A] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#153a2b] transition-colors shadow-sm">
+        
+        <button 
+          onClick={handleAddFriend}
+          className="inline-flex items-center gap-2 bg-[#1C4E3A] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#153a2b] transition-colors shadow-sm"
+        >
           <Plus className="w-5 h-5" />
           Add a Friend
         </button>
       </div>
 
-      {/* 2. Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16">
         {[
           { num: totalFriends, label: "Total Friends" },
@@ -66,10 +72,9 @@ export default function Home() {
         ))}
       </div>
 
-      {/* 3. Your Friends Grid Section */}
       <div>
         <h2 className="text-xl font-bold text-slate-900 mb-6">Your Friends</h2>
-        {/* Requirement 4: 4-column layout on large screens */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {friendsData.map((friend) => (
             <FriendCard key={friend.id} friend={friend} />

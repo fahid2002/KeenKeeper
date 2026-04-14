@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function FriendCard({ friend }) {
-  // Color coding based on status (Strictly following Figma)
   const statusConfig = {
     "overdue": "bg-[#FF4D4D] text-white",
     "almost due": "bg-[#FFB020] text-white",

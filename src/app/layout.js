@@ -16,8 +16,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
       <body className={`${inter.className} bg-[#F8FAFC] min-h-screen flex flex-col text-slate-900`}>
-        {/* Wrap the app in the Provider */}
-        <TimelineProvider>
+         
+          <TimelineProvider>
           
           <Navbar />
           
@@ -27,7 +27,6 @@ export default function RootLayout({ children }) {
           
           <Footer />
           
-          {/* Add the Toaster for pop-up notifications */}
           <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
           
         </TimelineProvider>
