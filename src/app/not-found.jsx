@@ -1,19 +1,28 @@
 import Link from "next/link";
 
+// Next.js MUST have a 'default' export for the 404 page to work
 export default function NotFound() {
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-8xl font-black text-[#1C4E3A] mb-4">404</h1>
-      <h2 className="text-3xl font-bold text-slate-900 mb-4">Page Not Found</h2>
-      <p className="text-slate-500 max-w-md mx-auto mb-8">
-        Oops! It looks like the page you are looking for doesn't exist or has been moved.
-      </p>
-      <Link 
-        href="/"
-        className="bg-[#1C4E3A] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#153a2b] transition-colors shadow-sm"
-      >
-        Return to Dashboard
-      </Link>
+    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 text-center">
+      {/* 404 Text */}
+      <h1 className="text-9xl font-black text-slate-200">404</h1>
+      
+      <div className="relative -mt-12">
+        <h2 className="text-3xl font-bold text-slate-900 mb-4">
+          Oops! Page not found
+        </h2>
+        <p className="text-slate-500 max-w-md mx-auto mb-8">
+          The page you're looking for doesn't exist or has been moved. 
+          Let's get you back to your friends.
+        </p>
+        
+        <Link 
+          href="/"
+          className="inline-block bg-[#1C4E3A] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#153a2b] transition-all shadow-md active:scale-95"
+        >
+          Back to Dashboard
+        </Link>
+      </div>
     </div>
   );
 }
