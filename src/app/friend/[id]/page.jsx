@@ -9,7 +9,8 @@ import {
   Phone, 
   MessageSquare, 
   Video, 
-  History 
+  History,
+  Users // Added Users icon for Meetup
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTimeline } from "@/context/TimelineContext";
@@ -52,7 +53,8 @@ export default function FriendDetails() {
   const getInteractionIcon = (type) => {
     if (type === "Call") return <Phone className="w-5 h-5 text-slate-700" />;
     if (type === "Video") return <Video className="w-5 h-5 text-slate-700" />;
-    return <MessageSquare className="w-5 h-5 text-slate-700" />; // Text/Meetup default
+    if (type === "Meetup") return <Users className="w-5 h-5 text-slate-700" />;
+    return <MessageSquare className="w-5 h-5 text-slate-700" />; // Text default
   };
 
   return (
@@ -142,7 +144,8 @@ export default function FriendDetails() {
 
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <h2 className="text-base font-bold text-slate-900 mb-4">Quick Check-In</h2>
-            <div className="grid grid-cols-3 gap-4">
+            {/* Changed to 4 columns to accommodate the new button */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               
               <button 
                 onClick={() => handleInteraction("Call")}
@@ -166,6 +169,15 @@ export default function FriendDetails() {
               >
                 <Video className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
                 <span className="text-sm font-medium text-slate-700">Video</span>
+              </button>
+
+              {/* Added Meetup Button */}
+              <button 
+                onClick={() => handleInteraction("Meetup")}
+                className="flex flex-col items-center justify-center py-6 border border-gray-200 rounded-xl hover:bg-slate-50 transition gap-3"
+              >
+                <Users className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+                <span className="text-sm font-medium text-slate-700">Meetup</span>
               </button>
 
             </div>
