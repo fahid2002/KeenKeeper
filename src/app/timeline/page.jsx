@@ -1,11 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useTimeline } from "@/context/TimelineContext";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 export default function TimelinePage() {
   const { entries } = useTimeline();
+  
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("All");
+
+  const filterOptions = ["All", "Call", "Text", "Video", "Meetup"];
 
   const getIconPath = (type) => {
     const safeType = type?.toLowerCase() || "text";
@@ -17,6 +24,11 @@ export default function TimelinePage() {
     return safeType === "meetup" ? "/meetup.png" : "/text.png";
   };
 
+  const filteredEntries = entries.filter((entry) => {
+    if (selectedFilter === "All") return true;
+    return entry.type.toLowerCase() === selectedFilter.toLowerCase();
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       
@@ -24,20 +36,47 @@ export default function TimelinePage() {
         Timeline
       </h1>
 
-      <div className="mb-8">
-        <button className="flex items-center justify-between gap-12 bg-white border border-gray-200 text-slate-500 px-4 py-2.5 rounded-lg text-sm hover:bg-slate-50 transition shadow-sm">
-          Filter timeline
-          <ChevronDown className="w-4 h-4 text-slate-400" />
+      {/* Updated Filter Dropdown */}
+      <div className="mb-8 relative w-max">
+        <button 
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          className="flex items-center justify-between gap-12 bg-white border border-gray-200 text-slate-500 px-4 py-2.5 rounded-lg text-sm hover:bg-slate-50 transition shadow-sm min-w-[170px]"
+        >
+          {selectedFilter === "All" ? "Filter timeline" : `Filter: ${selectedFilter}`}
+          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isFilterOpen ? "rotate-180" : ""}`} />
         </button>
+
+        {isFilterOpen && (
+          <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-2 overflow-hidden">
+            {filterOptions.map((option) => (
+              <button
+                key={option}
+                onClick={() => {
+                  setSelectedFilter(option);
+                  setIsFilterOpen(false); // Close menu after selection
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${
+                  selectedFilter === option 
+                    ? "text-slate-900 font-bold bg-slate-50" 
+                    : "text-slate-600"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-3">
-        {entries.length === 0 ? (
+        {filteredEntries.length === 0 ? (
           <p className="text-slate-500 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            No interactions logged yet.
+            {entries.length === 0 
+              ? "No interactions logged yet." 
+              : `No ${selectedFilter.toLowerCase()}s found in your timeline.`}
           </p>
         ) : (
-          [...entries].reverse().map((entry) => (
+          [...filteredEntries].reverse().map((entry) => (
             <div 
               key={entry.id} 
               className="bg-white border border-gray-100 rounded-xl p-4 md:p-5 flex items-center gap-5 shadow-sm"
