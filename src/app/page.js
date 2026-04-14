@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import FriendCard from "@/components/FriendCard";
 import friendsData from "@/data/friends.json";
 import { useTimeline } from "@/context/TimelineContext";
-import toast from "react-hot-toast"; // <-- Added import
+import toast from "react-hot-toast"; 
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);

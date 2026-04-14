@@ -1,10 +1,9 @@
 import Link from "next/link";
 
-// Next.js MUST have a 'default' export for the 404 page to work
 export default function NotFound() {
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 text-center">
-      {/* 404 Text */}
+
       <h1 className="text-9xl font-black text-slate-200">404</h1>
       
       <div className="relative -mt-12">

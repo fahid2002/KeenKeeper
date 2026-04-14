@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useTimeline } from "@/context/TimelineContext";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search, ArrowUpDown } from "lucide-react";
 
 export default function TimelinePage() {
   const { entries } = useTimeline();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest"); 
 
   const filterOptions = ["All", "Call", "Text", "Video", "Meetup"];
 
@@ -20,10 +24,27 @@ export default function TimelinePage() {
     return "/text.png";
   };
 
-  const filteredEntries = entries.filter((entry) => {
-    if (selectedFilter === "All") return true;
-    return entry.type.toLowerCase() === selectedFilter.toLowerCase();
-  });
+
+  const processedEntries = [...entries] 
+    .filter((entry) => {
+
+        const matchesFilter = selectedFilter === "All" || entry.type.toLowerCase() === selectedFilter.toLowerCase();
+      
+
+      const matchesSearch = 
+        entry.friendName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        entry.type.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      return matchesFilter && matchesSearch;
+    })
+    .sort((a, b) => {
+      
+        
+      const timeA = a.createdAt || parseInt(a.id);
+      const timeB = b.createdAt || parseInt(b.id);
+      
+      return sortOrder === "newest" ? timeB - timeA : timeA - timeB;
+    });
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -31,49 +52,76 @@ export default function TimelinePage() {
         Timeline
       </h1>
 
-      <div className="mb-8 relative w-max">
-        <button 
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="flex items-center justify-between gap-12 bg-white border border-gray-200 text-slate-500 px-4 py-2.5 rounded-lg text-sm hover:bg-slate-50 transition shadow-sm min-w-[170px]"
-        >
-          {selectedFilter === "All" ? "Filter timeline" : `Filter: ${selectedFilter}`}
-          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isFilterOpen ? "rotate-180" : ""}`} />
-        </button>
 
-        {isFilterOpen && (
-          <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-2 overflow-hidden">
-            {filterOptions.map((option) => (
-              <button
-                key={option}
-                onClick={() => {
-                  setSelectedFilter(option);
-                  setIsFilterOpen(false);
-                }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${
-                  selectedFilter === option 
-                    ? "text-slate-900 font-bold bg-slate-50" 
-                    : "text-slate-600"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        
+
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input 
+            type="text"
+            placeholder="Search friends or interaction types..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1C4E3A] transition shadow-sm"
+          />
+        </div>
+
+        <div className="flex gap-2">
+
+          <div className="relative">
+            <button 
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center justify-between gap-8 bg-white border border-gray-200 text-slate-500 px-4 py-2.5 rounded-lg text-sm hover:bg-slate-50 transition shadow-sm min-w-[150px]"
+            >
+              {selectedFilter === "All" ? "Filter timeline" : `Filter: ${selectedFilter}`}
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isFilterOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isFilterOpen && (
+              <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-2 overflow-hidden">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      setSelectedFilter(option);
+                      setIsFilterOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${
+                      selectedFilter === option 
+                        ? "text-slate-900 font-bold bg-slate-50" 
+                        : "text-slate-600"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+
+
+          <button 
+            onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
+            className="flex items-center gap-2 bg-white border border-gray-200 text-slate-600 px-4 py-2.5 rounded-lg text-sm hover:bg-slate-50 transition shadow-sm"
+          >
+            <ArrowUpDown className="w-4 h-4 text-slate-400" />
+            <span className="font-medium">{sortOrder === "newest" ? "Newest" : "Oldest"}</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        {filteredEntries.length === 0 ? (
+        {processedEntries.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
              <p className="text-slate-500">
               {entries.length === 0 
                 ? "No interactions logged yet. Go to a friend's page to log one!" 
-                : `No ${selectedFilter.toLowerCase()}s found.`}
+                : "No results match your search criteria."}
             </p>
           </div>
         ) : (
-          // Removed .reverse() here because Context now prepends new items
-          filteredEntries.map((entry) => (
+          processedEntries.map((entry) => (
             <div 
               key={entry.id} 
               className="bg-white border border-gray-100 rounded-xl p-4 md:p-5 flex items-center gap-5 shadow-sm"

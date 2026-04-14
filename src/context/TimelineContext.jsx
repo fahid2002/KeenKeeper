@@ -4,7 +4,6 @@ import { createContext, useContext, useState } from "react";
 
 const TimelineContext = createContext();
 
-// Removed all fixed data to start with a blank timeline
 export function TimelineProvider({ children }) {
   const [entries, setEntries] = useState([]);
 
@@ -14,6 +13,8 @@ export function TimelineProvider({ children }) {
       friendName,
       type,
       title,
+
+      createdAt: Date.now(), 
       date: new Date().toLocaleDateString('en-US', { 
         month: 'long', 
         day: 'numeric', 
@@ -21,7 +22,6 @@ export function TimelineProvider({ children }) {
       })
     };
     
-    // Using a functional update to ensure we don't lose logs
     setEntries((prev) => [newEntry, ...prev]);
   };
 
