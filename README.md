@@ -6,7 +6,8 @@
 
 **KeenKeeper** is a personal relationship management dashboard designed to help you nurture and maintain meaningful connections. It acts as a digital shelf for your friendships, allowing you to track your last contact, log interactions, and view analytics to ensure you never lose touch with the people who matter most.
 
-
+## Netlify Live Link: 
+🔗  https://keenkeeperr.netlify.app/
 
 ## ✨ 3 Key Features
 
